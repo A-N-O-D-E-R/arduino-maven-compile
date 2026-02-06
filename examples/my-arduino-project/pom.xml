@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>my-arduino-project</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>My Arduino Project</name>
+    <description>
+        Example project showing how to use arduino-maven-plugin to compile
+        Arduino sketches as part of a standard Maven build.
+    </description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.example</groupId>
+                <artifactId>arduino-maven-plugin</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+
+                <configuration>
+                    <!-- Pin the CLI version for reproducible builds -->
+                    <arduinoCliVersion>0.35.2</arduinoCliVersion>
+
+                    <!-- Target board — change to match your hardware -->
+                    <fqbn>arduino:avr:uno</fqbn>
+
+                    <!-- Where your .ino sketches live -->
+                    <sketchDir>${project.basedir}/src/arduino</sketchDir>
+
+                    <!-- Compiled .hex/.elf output goes here -->
+                    <outputDir>${project.build.directory}/arduino</outputDir>
+
+                    <!-- Local Arduino libraries developed in this project -->
+                    <libraryDir>${project.basedir}/src/arduino/library</libraryDir>
+
+                    <!-- Board cores to install -->
+                    <cores>
+                        <core>arduino:avr</core>
+                    </cores>
+
+                    <!-- Arduino libraries your sketches depend on -->
+                    <libraries>
+                        <library>Servo</library>
+                    </libraries>
+                </configuration>
+
+                <executions>
+                    <!-- Step 1: Download arduino-cli if not cached -->
+                    <execution>
+                        <id>install-cli</id>
+                        <goals><goal>install-cli</goal></goals>
+                    </execution>
+
+                    <!-- Step 2: Install board cores -->
+                    <execution>
+                        <id>install-cores</id>
+                        <goals><goal>install-cores</goal></goals>
+                    </execution>
+
+                    <!-- Step 3: Install libraries -->
+                    <execution>
+                        <id>install-libraries</id>
+                        <goals><goal>install-libraries</goal></goals>
+                    </execution>
+
+                    <!-- Step 4: Compile local libraries (via their examples) -->
+                    <execution>
+                        <id>compile-library</id>
+                        <goals><goal>compile-library</goal></goals>
+                    </execution>
+
+                    <!-- Step 5: Compile all sketches under src/arduino -->
+                    <execution>
+                        <id>compile</id>
+                        <goals><goal>compile</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
