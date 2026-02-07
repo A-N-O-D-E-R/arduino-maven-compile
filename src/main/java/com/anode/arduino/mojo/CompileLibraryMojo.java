@@ -1,6 +1,6 @@
-package com.example.arduino.mojo;
+package com.anode.arduino.mojo;
 
-import com.example.arduino.util.CliExecutor;
+import com.anode.arduino.util.CliExecutor;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;

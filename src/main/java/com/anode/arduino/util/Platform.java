@@ -1,4 +1,4 @@
-package com.example.arduino.util;
+package com.anode.arduino.util;
 
 import org.apache.maven.plugin.MojoExecutionException;
 
