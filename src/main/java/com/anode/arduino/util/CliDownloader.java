@@ -18,7 +18,7 @@ import java.util.zip.ZipInputStream;
  * under the local Maven repository so it survives clean builds and is shared
  * across projects on the same machine.
  *
- *   ~/.m2/repository/com/example/arduino-cli/{version}/{platform}/arduino-cli
+ *   ~/.m2/repository/com/anode/arduino/arduino-cli/{version}/{platform}/arduino-cli
  *
  * The download is skipped entirely when the cached binary already exists,
  * making repeated builds fast and offline-capable after the first run.
@@ -79,7 +79,7 @@ public final class CliDownloader {
         if (userHome == null) {
             throw new MojoExecutionException("Cannot determine user home directory");
         }
-        Path dir = Paths.get(userHome, ".m2", "repository", "com", "example",
+        Path dir = Paths.get(userHome, ".m2", "repository", "com", "anode", "arduino",
                 "arduino-cli", version, platform.toString());
         try {
             Files.createDirectories(dir);
