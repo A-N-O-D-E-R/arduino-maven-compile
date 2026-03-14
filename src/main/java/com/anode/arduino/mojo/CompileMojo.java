@@ -77,8 +77,15 @@ public class CompileMojo extends AbstractMojo {
     @Parameter
     private List<String> compileFlags;
 
+    @Parameter(property = "skip-arduino-compile", defaultValue = "false")
+    private boolean skip;
+
     @Override
     public void execute() throws MojoExecutionException {
+        if (skip) {
+            getLog().info("Skipping arduino-compile (skip-arduino-compile=true)");
+            return;
+        }
         Path cliPath    = Paths.get(arduinoCliPath);
         Path sketchRoot = Paths.get(sketchDir);
         Path outputRoot = Paths.get(outputDir);

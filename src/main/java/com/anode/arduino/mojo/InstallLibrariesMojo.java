@@ -40,8 +40,15 @@ public class InstallLibrariesMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
+    @Parameter(property = "skip-arduino-compile", defaultValue = "false")
+    private boolean skip;
+
     @Override
     public void execute() throws MojoExecutionException {
+        if (skip) {
+            getLog().info("Skipping arduino-compile (skip-arduino-compile=true)");
+            return;
+        }
         if (libraries == null || libraries.isEmpty()) {
             getLog().info("No libraries configured — skipping.");
             return;

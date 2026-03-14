@@ -35,8 +35,15 @@ public class InstallCliMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private org.apache.maven.project.MavenProject project;
 
+    @Parameter(property = "skip-arduino-compile", defaultValue = "false")
+    private boolean skip;
+
     @Override
     public void execute() throws MojoExecutionException {
+        if (skip) {
+            getLog().info("Skipping arduino-compile (skip-arduino-compile=true)");
+            return;
+        }
         Platform platform = Platform.detect();
         getLog().info("Detected platform: " + platform);
 

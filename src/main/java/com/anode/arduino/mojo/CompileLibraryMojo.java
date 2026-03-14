@@ -76,8 +76,15 @@ public class CompileLibraryMojo extends AbstractMojo {
     @Parameter
     private List<String> compileFlags;
 
+    @Parameter(property = "skip-arduino-compile", defaultValue = "false")
+    private boolean skip;
+
     @Override
     public void execute() throws MojoExecutionException {
+        if (skip) {
+            getLog().info("Skipping arduino-compile (skip-arduino-compile=true)");
+            return;
+        }
         Path cliPath    = Paths.get(arduinoCliPath);
         Path libRoot    = Paths.get(libraryDir);
         Path outputRoot = Paths.get(outputDir).resolve("libraries");
