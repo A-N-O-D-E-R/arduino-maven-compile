@@ -32,7 +32,7 @@ public class InstallCoresMojo extends AbstractMojo {
      * install-cli goal via a project property, but can be overridden to
      * point at a system-installed binary.
      */
-    @Parameter(defaultValue = "${arduino.cli.path}", property = "arduino.cli.path", required = true)
+    @Parameter(defaultValue = "${arduino.cli.path}", property = "arduino.cli.path")
     private String arduinoCliPath;
 
     /**
@@ -53,6 +53,10 @@ public class InstallCoresMojo extends AbstractMojo {
         if (skip) {
             getLog().info("Skipping arduino-compile (skip-arduino-compile=true)");
             return;
+        }
+        if (arduinoCliPath == null || arduinoCliPath.isEmpty()) {
+            throw new MojoExecutionException(
+                    "arduino.cli.path is not set. Run the install-cli goal first.");
         }
         if (cores == null || cores.isEmpty()) {
             cores = Collections.singletonList("arduino:avr");

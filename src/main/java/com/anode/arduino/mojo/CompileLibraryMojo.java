@@ -49,7 +49,7 @@ import java.util.stream.Stream;
 @Mojo(name = "compile-library", defaultPhase = LifecyclePhase.COMPILE)
 public class CompileLibraryMojo extends AbstractMojo {
 
-    @Parameter(property = "arduino.cli.path", required = true)
+    @Parameter(property = "arduino.cli.path")
     private String arduinoCliPath;
 
     /** Fully Qualified Board Name used to compile library examples. */
@@ -84,6 +84,10 @@ public class CompileLibraryMojo extends AbstractMojo {
         if (skip) {
             getLog().info("Skipping arduino-compile (skip-arduino-compile=true)");
             return;
+        }
+        if (arduinoCliPath == null || arduinoCliPath.isEmpty()) {
+            throw new MojoExecutionException(
+                    "arduino.cli.path is not set. Run the install-cli goal first.");
         }
         Path cliPath    = Paths.get(arduinoCliPath);
         Path libRoot    = Paths.get(libraryDir);

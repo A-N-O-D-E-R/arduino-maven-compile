@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 @Mojo(name = "compile", defaultPhase = LifecyclePhase.COMPILE)
 public class CompileMojo extends AbstractMojo {
 
-    @Parameter(property = "arduino.cli.path", required = true)
+    @Parameter(property = "arduino.cli.path")
     private String arduinoCliPath;
 
     /**
@@ -85,6 +85,10 @@ public class CompileMojo extends AbstractMojo {
         if (skip) {
             getLog().info("Skipping arduino-compile (skip-arduino-compile=true)");
             return;
+        }
+        if (arduinoCliPath == null || arduinoCliPath.isEmpty()) {
+            throw new MojoExecutionException(
+                    "arduino.cli.path is not set. Run the install-cli goal first.");
         }
         Path cliPath    = Paths.get(arduinoCliPath);
         Path sketchRoot = Paths.get(sketchDir);

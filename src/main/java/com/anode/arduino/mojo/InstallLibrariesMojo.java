@@ -25,7 +25,7 @@ import java.util.List;
 @Mojo(name = "install-libraries", defaultPhase = LifecyclePhase.INITIALIZE)
 public class InstallLibrariesMojo extends AbstractMojo {
 
-    @Parameter(property = "arduino.cli.path", required = true)
+    @Parameter(property = "arduino.cli.path")
     private String arduinoCliPath;
 
     /**
@@ -48,6 +48,10 @@ public class InstallLibrariesMojo extends AbstractMojo {
         if (skip) {
             getLog().info("Skipping arduino-compile (skip-arduino-compile=true)");
             return;
+        }
+        if (arduinoCliPath == null || arduinoCliPath.isEmpty()) {
+            throw new MojoExecutionException(
+                    "arduino.cli.path is not set. Run the install-cli goal first.");
         }
         if (libraries == null || libraries.isEmpty()) {
             getLog().info("No libraries configured — skipping.");
