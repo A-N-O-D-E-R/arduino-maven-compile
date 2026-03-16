@@ -2,8 +2,10 @@ package com.anode.arduino.mojo;
 
 import com.anode.arduino.util.CliDownloader;
 import com.anode.arduino.util.Platform;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -38,6 +40,9 @@ public class InstallCliMojo extends AbstractMojo {
     @Parameter(property = "skip-arduino-compile", defaultValue = "false")
     private boolean skip;
 
+    @Component
+    private MavenSession session;
+
     @Override
     public void execute() throws MojoExecutionException {
         if (skip) {
@@ -48,7 +53,7 @@ public class InstallCliMojo extends AbstractMojo {
         getLog().info("Detected platform: " + platform);
 
         CliDownloader downloader = new CliDownloader(getLog());
-        Path cliBinary = downloader.ensureInstalled(arduinoCliVersion, platform);
+        Path cliBinary = downloader.ensureInstalled(arduinoCliVersion, platform, session.isOffline());
 
         // Expose the resolved path to other Mojos via a project property.
         // This avoids each Mojo independently re-detecting the platform.

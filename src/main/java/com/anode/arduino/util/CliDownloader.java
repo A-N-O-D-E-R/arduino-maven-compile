@@ -41,15 +41,22 @@ public final class CliDownloader {
      *
      * @param version  arduino-cli version, e.g. "0.35.2"
      * @param platform detected host platform
+     * @param offline  when true, skips the download and fails if not cached
      * @return absolute path to the executable
      */
-    public Path ensureInstalled(String version, Platform platform) throws MojoExecutionException {
+    public Path ensureInstalled(String version, Platform platform, boolean offline) throws MojoExecutionException {
         Path cacheDir   = getCacheDir(version, platform);
         Path executable = cacheDir.resolve(platform.getExecutableName());
 
         if (Files.isRegularFile(executable)) {
             log.info("arduino-cli " + version + " already cached at " + executable);
             return executable;
+        }
+
+        if (offline) {
+            throw new MojoExecutionException(
+                    "arduino-cli " + version + " is not cached and Maven is running in offline mode. "
+                    + "Run once online to download and cache it.");
         }
 
         String url = platform.getDownloadUrl(version);
